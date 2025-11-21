@@ -1,419 +1,477 @@
-import React, { useState } from 'react';
-import { 
-  Shield, 
-  HeartPulse, 
-  Activity, 
-  BedDouble, 
-  Calendar, 
-  Infinity, 
-  AlertCircle, 
-  Building2, 
-  Wallet, 
-  CheckCircle2,
-  Users,
-  Phone,
-  ArrowRight,
-  Ambulance,
-  Coins,
-  Clock
-} from 'lucide-react';
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proposal Takaful Digital</title>
+    
+    <!-- Tailwind CSS (Untuk Design Cantik) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- React & Babel (Supaya code React boleh jalan dalam HTML biasa) -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-const ProposalApp = () => {
-  const [activeTab, setActiveTab] = useState('compare');
-  const [selectedTerm, setSelectedTerm] = useState(null);
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .animate-fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <div id="root"></div>
 
-  // Data extracted from the user's image
-  const clientName = "Muhammad Aisy Fayyadh bin Azlan";
-  const agentName = "MUHAMMAD HAFIZUL BIN CHE AMID";
+    <script type="text/babel">
+        const { useState } = React;
 
-  const plans = [
-    {
-      id: 'A',
-      name: 'Plan A (Starter)',
-      price: 155, // Updated Price from latest image
-      highlight: false,
-      features: {
-        medicalCard: true,
-        roomBoard: 150,
-        annualLimit: 'RM 150,000',
-        lifeTimeLimit: 'Unlimited',
-        additionalLimit: 'RM 750 Ribu',
-        govHosp: 'RM 50',
-        deathHibah: 'RM 10,000',
-        crisisShield: 'Tiada',
-        accidental: 'RM 20,000',
-        incomeProtector: 'Tiada',
-      }
-    },
-    {
-      id: 'B',
-      name: 'Plan B (Basic)',
-      price: 169,
-      highlight: false,
-      features: {
-        medicalCard: true,
-        roomBoard: 200,
-        annualLimit: 'RM 200,000',
-        lifeTimeLimit: 'Unlimited',
-        additionalLimit: 'RM 1 Juta',
-        govHosp: 'RM 100',
-        deathHibah: 'RM 10,000',
-        crisisShield: 'Tiada',
-        accidental: 'RM 20,000',
-        incomeProtector: 'Tiada',
-      }
-    },
-    {
-      id: 'C',
-      name: 'Plan C (Plus)',
-      price: 183,
-      highlight: false,
-      features: {
-        medicalCard: true,
-        roomBoard: 200,
-        annualLimit: 'RM 200,000',
-        lifeTimeLimit: 'Unlimited',
-        additionalLimit: 'RM 1 Juta',
-        govHosp: 'RM 100',
-        deathHibah: 'RM 10,000',
-        crisisShield: 'Tiada',
-        accidental: 'RM 20,000',
-        incomeProtector: 'RM 4,000',
-      }
-    },
-    {
-      id: 'D',
-      name: 'Plan D (Premium)',
-      price: 191,
-      highlight: true, // Recommended
-      tag: 'Paling Berbaloi',
-      features: {
-        medicalCard: true,
-        roomBoard: 200,
-        annualLimit: 'RM 200,000',
-        lifeTimeLimit: 'Unlimited',
-        additionalLimit: 'RM 1 Juta',
-        govHosp: 'RM 100',
-        deathHibah: 'RM 20,000', // Higher
-        crisisShield: 'RM 16,000', // Included
-        accidental: 'RM 20,000',
-        incomeProtector: 'RM 4,000',
-      }
-    }
-  ];
+        // --- ICONS COMPONENT (Updated with Fragments <>...</>) ---
+        const Icon = ({ name, size = 20, className = "" }) => {
+            const icons = {
+                Shield: <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />,
+                BedDouble: <path d="M2 20v-8m0 0V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v7m-20 0h20M4 10h16v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-6zm-2 6h20" />,
+                Activity: <path d="M22 12h-4l-3 9L9 3l-3 9H2" />,
+                HeartPulse: <path d="M19 14c1.49-1.28 3.6-1.28 5.09 0 1.49 1.28 1.49 3.36 0 4.64-1.49 1.28-3.6 1.28-5.09 0L12 12l-7 6.64c-1.49 1.28-3.6 1.28-5.09 0-1.49-1.28-1.49-3.36 0-4.64 1.49-1.28 3.6-1.28 5.09 0L12 20l7-6z" />,
+                AlertCircle: <g><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></g>,
+                
+                // Fixed icons with fragments <>...</>
+                Wallet: <><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4" /><path d="M4 6v12a2 2 0 0 0 2 2h14v-4" /><path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z" /></>,
+                
+                Building2: <><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z" /><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2" /><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2" /><path d="M10 6h4" /><path d="M10 10h4" /><path d="M10 14h4" /><path d="M10 18h4" /></>,
+                
+                Phone: <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />,
+                
+                CheckCircle2: <><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" /><path d="m9 12 2 2 4-4" /></>,
+                
+                Ambulance: <><path d="M10 10H6" /><path d="M14 18a2 2 0 0 1-2 2" /><path d="M18 18a2 2 0 0 1-2 2" /><path d="M6 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V10" /><path d="M6 8h12l4 5v5" /><path d="M6 8V6a2 2 0 0 1 2-2h2" /></>,
+                
+                Coins: <><circle cx="8" cy="8" r="6" /><path d="M18.09 10.37A6 6 0 1 1 10.34 18" /><path d="M7 6h1v4" /><path d="m16.71 13.88.7.71-2.82 2.82" /></>,
+                
+                Clock: <><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></>
+            };
 
-  // Explanation dictionary for non-agents
-  const terms = {
-    'roomBoard': {
-      title: 'Harga Bilik Hospital',
-      desc: 'Had harga bilik sehari. RM200 selalunya cukup untuk bilik 2-katil atau single standard di hospital swasta biasa. Plan A (RM150) mungkin perlu tambah duit sendiri di bandar besar.'
-    },
-    'annualLimit': {
-      title: 'Had Tahunan (Limit Kad)',
-      desc: 'Jumlah bil rawatan setahun yang Takaful tolong bayar. RM200k setahun sangat selesa.'
-    },
-    'smartSaver': {
-      title: 'Smart Saver 300',
-      desc: 'Ini bermaksud jika masuk wad hospital swasta, anda hanya perlu bayar RM300 pertama (sekali masuk). Baki bil selebihnya (contoh RM50,000) Takaful yang bayar.'
-    },
-    'additionalLimit': {
-      title: 'Limit Tambahan (Penyakit Berat)',
-      desc: 'Jika kena Kanser, Sakit Jantung atau Buah Pinggang, kuota kad akan ditambah lagi RM1 Juta (atau RM750k untuk Plan A) supaya rawatan tak putus.'
-    },
-    'deathHibah': {
-      title: 'Hibah Kematian',
-      desc: 'Pampasan tunai untuk waris teruskan hidup jika berlaku kematian kepada peserta.'
-    },
-    'crisisShield': {
-      title: 'Pampasan Sakit Kritikal',
-      desc: 'Duit tunai (cash) diberi jika sakit kritikal. Boleh guna untuk ganti gaji atau rawatan alternatif.'
-    },
-    'incomeProtector': {
-      title: 'Pelindung Pendapatan',
-      desc: 'Elaun tunai khas jika disahkan sakit tertentu, untuk bantu tampung komitmen bulanan.'
-    },
-    'govHosp': {
-      title: 'Elaun Hospital Kerajaan',
-      desc: 'Kalau pilih masuk hospital kerajaan (sebab swasta penuh dll), Takaful bayar tunai RM100 sehari (atau RM50 untuk Plan A) ke poket anda.'
-    },
-    'accidental': {
-      title: 'Perlindungan Kemalangan',
-      desc: 'Pampasan RM20,000 jika berlaku kematian/cacat akibat kemalangan. Ada tambahan RM2,000 untuk rawatan kecederaan kemalangan.'
-    }
-  };
-
-  return (
-    <div className="min-h-screen bg-gray-50 font-sans text-gray-800 pb-20">
-      {/* Header Section */}
-      <header className="bg-gradient-to-r from-teal-600 to-emerald-600 text-white pb-12 pt-8 px-4 rounded-b-[2.5rem] shadow-2xl">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-block bg-white/20 px-4 py-1 rounded-full text-xs font-bold tracking-wider mb-4 backdrop-blur-sm uppercase">
-            Proposal Digital
-          </div>
-          <h1 className="text-xl md:text-3xl font-bold mb-2 leading-tight">{clientName}</h1>
-          <p className="text-teal-100 text-sm opacity-90">PruBSN Anugerah Max</p>
-        </div>
-      </header>
-
-      <main className="max-w-6xl mx-auto px-4 -mt-8">
-        
-        {/* Navigation Tabs */}
-        <div className="flex justify-center mb-8">
-          <div className="bg-white p-1.5 rounded-full shadow-lg inline-flex border border-gray-100">
-            <button 
-              onClick={() => setActiveTab('compare')}
-              className={`px-6 py-2 rounded-full text-sm font-bold transition-all ${activeTab === 'compare' ? 'bg-teal-600 text-white shadow-md' : 'text-gray-400 hover:text-teal-600'}`}
-            >
-              Pilihan Plan
-            </button>
-            <button 
-              onClick={() => setActiveTab('learn')}
-              className={`px-6 py-2 rounded-full text-sm font-bold transition-all ${activeTab === 'learn' ? 'bg-teal-600 text-white shadow-md' : 'text-gray-400 hover:text-teal-600'}`}
-            >
-              Kamus Mudah
-            </button>
-          </div>
-        </div>
-
-        {/* Global Info Banner (Smart Saver) */}
-        {activeTab === 'compare' && (
-          <div className="mb-6 bg-blue-50 border border-blue-200 rounded-xl p-4 flex items-start gap-3 max-w-4xl mx-auto shadow-sm">
-             <div className="bg-blue-100 p-2 rounded-full text-blue-600 mt-1 shrink-0">
-               <Coins size={18} />
-             </div>
-             <div>
-               <h4 className="font-bold text-blue-800 text-sm">Info Penting: Smart Saver 300</h4>
-               <p className="text-xs text-blue-700 mt-1 leading-relaxed">
-                 Semua plan di bawah adalah "Smart Saver 300". Maksudnya, jika masuk wad swasta, anda hanya perlu bayar <b>RM300</b> pertama. Baki bil perubatan selebihnya ditanggung Takaful (tertakluk terma).
-               </p>
-             </div>
-          </div>
-        )}
-
-        {/* CONTENT: Comparison View */}
-        {activeTab === 'compare' && (
-          <div className="space-y-6">
-            {/* Plan Cards Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {plans.map((plan) => (
-                <div 
-                  key={plan.id} 
-                  className={`relative bg-white rounded-2xl shadow-lg overflow-hidden border transition-all duration-300 hover:shadow-xl ${plan.highlight ? 'border-teal-500 ring-2 ring-teal-500/20 transform md:-translate-y-2 z-10' : 'border-gray-100'}`}
+            return (
+                <svg 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    width={size} 
+                    height={size} 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    strokeWidth="2" 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    className={className}
                 >
-                  {plan.tag && (
-                    <div className="absolute top-0 inset-x-0 bg-teal-500 text-white text-[10px] font-bold text-center py-1.5 uppercase tracking-widest">
-                      {plan.tag}
+                    {icons[name] || <circle cx="12" cy="12" r="10" />}
+                </svg>
+            );
+        };
+
+        // --- MAIN APP COMPONENT ---
+        const ProposalApp = () => {
+            const [activeTab, setActiveTab] = useState('compare');
+            const [selectedTerm, setSelectedTerm] = useState(null);
+
+            // Data
+            const clientName = "Muhammad Aisy Fayyadh bin Azlan";
+            const agentName = "MUHAMMAD HAFIZUL BIN CHE AMID";
+
+            const plans = [
+                {
+                id: 'A',
+                name: 'Plan A (Starter)',
+                price: 155,
+                highlight: false,
+                features: {
+                    medicalCard: true,
+                    roomBoard: 150,
+                    annualLimit: 'RM 150,000',
+                    lifeTimeLimit: 'Unlimited',
+                    additionalLimit: 'RM 750 Ribu',
+                    govHosp: 'RM 50',
+                    deathHibah: 'RM 10,000',
+                    crisisShield: 'Tiada',
+                    accidental: 'RM 20,000',
+                    incomeProtector: 'Tiada',
+                }
+                },
+                {
+                id: 'B',
+                name: 'Plan B (Basic)',
+                price: 169,
+                highlight: false,
+                features: {
+                    medicalCard: true,
+                    roomBoard: 200,
+                    annualLimit: 'RM 200,000',
+                    lifeTimeLimit: 'Unlimited',
+                    additionalLimit: 'RM 1 Juta',
+                    govHosp: 'RM 100',
+                    deathHibah: 'RM 10,000',
+                    crisisShield: 'Tiada',
+                    accidental: 'RM 20,000',
+                    incomeProtector: 'Tiada',
+                }
+                },
+                {
+                id: 'C',
+                name: 'Plan C (Plus)',
+                price: 183,
+                highlight: false,
+                features: {
+                    medicalCard: true,
+                    roomBoard: 200,
+                    annualLimit: 'RM 200,000',
+                    lifeTimeLimit: 'Unlimited',
+                    additionalLimit: 'RM 1 Juta',
+                    govHosp: 'RM 100',
+                    deathHibah: 'RM 10,000',
+                    crisisShield: 'Tiada',
+                    accidental: 'RM 20,000',
+                    incomeProtector: 'RM 4,000',
+                }
+                },
+                {
+                id: 'D',
+                name: 'Plan D (Premium)',
+                price: 191,
+                highlight: true,
+                tag: 'Paling Berbaloi',
+                features: {
+                    medicalCard: true,
+                    roomBoard: 200,
+                    annualLimit: 'RM 200,000',
+                    lifeTimeLimit: 'Unlimited',
+                    additionalLimit: 'RM 1 Juta',
+                    govHosp: 'RM 100',
+                    deathHibah: 'RM 20,000',
+                    crisisShield: 'RM 16,000',
+                    accidental: 'RM 20,000',
+                    incomeProtector: 'RM 4,000',
+                }
+                }
+            ];
+
+            // Glossary Terms
+            const terms = {
+                'roomBoard': {
+                title: 'Harga Bilik Hospital',
+                desc: 'Had harga bilik sehari. RM200 selalunya cukup untuk bilik 2-katil atau single standard di hospital swasta biasa. Plan A (RM150) mungkin perlu tambah duit sendiri di bandar besar.'
+                },
+                'annualLimit': {
+                title: 'Had Tahunan (Limit Kad)',
+                desc: 'Jumlah bil rawatan setahun yang Takaful tolong bayar. RM200k setahun sangat selesa.'
+                },
+                'smartSaver': {
+                title: 'Smart Saver 300',
+                desc: 'Ini bermaksud jika masuk wad hospital swasta, anda hanya perlu bayar RM300 pertama (sekali masuk). Baki bil selebihnya (contoh RM50,000) Takaful yang bayar.'
+                },
+                'additionalLimit': {
+                title: 'Limit Tambahan (Penyakit Berat)',
+                desc: 'Jika kena Kanser, Sakit Jantung atau Buah Pinggang, kuota kad akan ditambah lagi RM1 Juta (atau RM750k untuk Plan A) supaya rawatan tak putus.'
+                },
+                'deathHibah': {
+                title: 'Hibah Kematian',
+                desc: 'Pampasan tunai untuk waris teruskan hidup jika berlaku kematian kepada peserta.'
+                },
+                'crisisShield': {
+                title: 'Pampasan Sakit Kritikal',
+                desc: 'Duit tunai (cash) diberi jika sakit kritikal. Boleh guna untuk ganti gaji atau rawatan alternatif.'
+                },
+                'incomeProtector': {
+                title: 'Pelindung Pendapatan',
+                desc: 'Elaun tunai khas jika disahkan sakit tertentu, untuk bantu tampung komitmen bulanan.'
+                },
+                'govHosp': {
+                title: 'Elaun Hospital Kerajaan',
+                desc: 'Kalau pilih masuk hospital kerajaan (sebab swasta penuh dll), Takaful bayar tunai RM100 sehari (atau RM50 untuk Plan A) ke poket anda.'
+                },
+                'accidental': {
+                title: 'Perlindungan Kemalangan',
+                desc: 'Pampasan RM20,000 jika berlaku kematian/cacat akibat kemalangan. Ada tambahan RM2,000 untuk rawatan kecederaan kemalangan.'
+                }
+            };
+
+            return (
+                <div className="min-h-screen bg-gray-50 font-sans text-gray-800 pb-20">
+                {/* Header Section */}
+                <header className="bg-gradient-to-r from-teal-600 to-emerald-600 text-white pb-12 pt-8 px-4 rounded-b-[2.5rem] shadow-2xl">
+                    <div className="max-w-4xl mx-auto text-center">
+                    <div className="inline-block bg-white/20 px-4 py-1 rounded-full text-xs font-bold tracking-wider mb-4 backdrop-blur-sm uppercase">
+                        Proposal Digital
                     </div>
-                  )}
-                  
-                  <div className={`p-4 ${plan.tag ? 'pt-8' : ''}`}>
-                    <h3 className="text-lg font-bold text-gray-700 text-center">{plan.name}</h3>
-                    <div className="text-center my-4 pb-4 border-b border-gray-100">
-                      <span className="text-2xl font-extrabold text-teal-600">
-                        RM{plan.price}
-                      </span>
-                      <span className="text-gray-400 text-xs block mt-1">/bulan</span>
+                    <h1 className="text-xl md:text-3xl font-bold mb-2 leading-tight">{clientName}</h1>
+                    <p className="text-teal-100 text-sm opacity-90">PruBSN Anugerah Max</p>
                     </div>
+                </header>
 
-                    <div className="space-y-3">
-                      {/* Medical Card Specs Section */}
-                      <div className="bg-gray-50 rounded-lg p-3 space-y-2">
-                        <div className="flex items-center justify-between text-xs">
-                          <span className="text-gray-500 font-medium flex items-center gap-1.5">
-                            <BedDouble size={14} className="text-teal-600"/> Bilik
-                          </span>
-                          <span className="font-bold text-gray-700">RM {plan.features.roomBoard}</span>
-                        </div>
-                        <div className="flex items-center justify-between text-xs">
-                          <span className="text-gray-500 font-medium flex items-center gap-1.5">
-                            <Activity size={14} className="text-teal-600"/> Limit Thn
-                          </span>
-                          <span className="font-bold text-gray-700">{plan.features.annualLimit}</span>
-                        </div>
-                         <div className="flex items-center justify-between text-xs">
-                          <span className="text-gray-500 font-medium flex items-center gap-1.5">
-                            <HeartPulse size={14} className="text-teal-600"/> Limit Add.
-                          </span>
-                          <span className="font-bold text-gray-700">{plan.features.additionalLimit}</span>
-                        </div>
-                      </div>
-
-                      {/* Cash Benefits Section */}
-                      <div className="space-y-2 pt-2">
-                        <FeatureRow 
-                          icon={<Shield size={14} className="text-blue-500"/>}
-                          label="Hibah"
-                          value={plan.features.deathHibah}
-                          termKey="deathHibah"
-                          setSelectedTerm={setSelectedTerm}
-                          isHighlight={plan.id === 'D'}
-                        />
-                        
-                        <FeatureRow 
-                          icon={<AlertCircle size={14} className="text-red-500"/>}
-                          label="Sakit Kritikal"
-                          value={plan.features.crisisShield}
-                          termKey="crisisShield"
-                          setSelectedTerm={setSelectedTerm}
-                          isHighlight={plan.id === 'D' && plan.features.crisisShield !== 'Tiada'}
-                        />
-
-                        <FeatureRow 
-                          icon={<Wallet size={14} className="text-orange-500"/>}
-                          label="Income Prot"
-                          value={plan.features.incomeProtector}
-                          termKey="incomeProtector"
-                          setSelectedTerm={setSelectedTerm}
-                          isHighlight={plan.features.incomeProtector !== 'Tiada'}
-                        />
-
-                         <FeatureRow 
-                          icon={<Building2 size={14} className="text-purple-500"/>}
-                          label="Elaun Gov"
-                          value={plan.features.govHosp}
-                          termKey="govHosp"
-                          setSelectedTerm={setSelectedTerm}
-                          isHighlight={false}
-                        />
-
-                        <FeatureRow 
-                          icon={<Ambulance size={14} className="text-slate-500"/>}
-                          label="Kemalangan"
-                          value={plan.features.accidental}
-                          termKey="accidental"
-                          setSelectedTerm={setSelectedTerm}
-                          isHighlight={false}
-                        />
-                      </div>
-                    </div>
+                <main className="max-w-6xl mx-auto px-4 -mt-8">
                     
-                    <button className={`w-full mt-6 py-2.5 text-sm rounded-xl font-bold shadow-sm transition-all active:scale-95 ${plan.highlight ? 'bg-teal-600 text-white hover:bg-teal-700 shadow-teal-200' : 'bg-white border-2 border-gray-100 text-gray-600 hover:border-teal-500 hover:text-teal-600'}`}>
-                      Pilih {plan.id}
+                    {/* Navigation Tabs */}
+                    <div className="flex justify-center mb-8">
+                    <div className="bg-white p-1.5 rounded-full shadow-lg inline-flex border border-gray-100">
+                        <button 
+                        onClick={() => setActiveTab('compare')}
+                        className={`px-6 py-2 rounded-full text-sm font-bold transition-all ${activeTab === 'compare' ? 'bg-teal-600 text-white shadow-md' : 'text-gray-400 hover:text-teal-600'}`}
+                        >
+                        Pilihan Plan
+                        </button>
+                        <button 
+                        onClick={() => setActiveTab('learn')}
+                        className={`px-6 py-2 rounded-full text-sm font-bold transition-all ${activeTab === 'learn' ? 'bg-teal-600 text-white shadow-md' : 'text-gray-400 hover:text-teal-600'}`}
+                        >
+                        Kamus Mudah
+                        </button>
+                    </div>
+                    </div>
+
+                    {/* Global Info Banner (Smart Saver) */}
+                    {activeTab === 'compare' && (
+                    <div className="mb-6 bg-blue-50 border border-blue-200 rounded-xl p-4 flex items-start gap-3 max-w-4xl mx-auto shadow-sm">
+                        <div className="bg-blue-100 p-2 rounded-full text-blue-600 mt-1 shrink-0">
+                            <Icon name="Coins" size={18} />
+                        </div>
+                        <div>
+                        <h4 className="font-bold text-blue-800 text-sm">Info Penting: Smart Saver 300</h4>
+                        <p className="text-xs text-blue-700 mt-1 leading-relaxed">
+                            Semua plan di bawah adalah "Smart Saver 300". Maksudnya, jika masuk wad swasta, anda hanya perlu bayar <b>RM300</b> pertama. Baki bil perubatan selebihnya ditanggung Takaful (tertakluk terma).
+                        </p>
+                        </div>
+                    </div>
+                    )}
+
+                    {/* CONTENT: Comparison View */}
+                    {activeTab === 'compare' && (
+                    <div className="space-y-6 animate-fade-in">
+                        {/* Plan Cards Grid */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        {plans.map((plan) => (
+                            <div 
+                            key={plan.id} 
+                            className={`relative bg-white rounded-2xl shadow-lg overflow-hidden border transition-all duration-300 hover:shadow-xl ${plan.highlight ? 'border-teal-500 ring-2 ring-teal-500/20 transform md:-translate-y-2 z-10' : 'border-gray-100'}`}
+                            >
+                            {plan.tag && (
+                                <div className="absolute top-0 inset-x-0 bg-teal-500 text-white text-[10px] font-bold text-center py-1.5 uppercase tracking-widest">
+                                {plan.tag}
+                                </div>
+                            )}
+                            
+                            <div className={`p-4 ${plan.tag ? 'pt-8' : ''}`}>
+                                <h3 className="text-lg font-bold text-gray-700 text-center">{plan.name}</h3>
+                                <div className="text-center my-4 pb-4 border-b border-gray-100">
+                                <span className="text-2xl font-extrabold text-teal-600">
+                                    RM{plan.price}
+                                </span>
+                                <span className="text-gray-400 text-xs block mt-1">/bulan</span>
+                                </div>
+
+                                <div className="space-y-3">
+                                {/* Medical Card Specs Section */}
+                                <div className="bg-gray-50 rounded-lg p-3 space-y-2">
+                                    <div className="flex items-center justify-between text-xs">
+                                    <span className="text-gray-500 font-medium flex items-center gap-1.5">
+                                        <Icon name="BedDouble" size={14} className="text-teal-600"/> Bilik
+                                    </span>
+                                    <span className="font-bold text-gray-700">RM {plan.features.roomBoard}</span>
+                                    </div>
+                                    <div className="flex items-center justify-between text-xs">
+                                    <span className="text-gray-500 font-medium flex items-center gap-1.5">
+                                        <Icon name="Activity" size={14} className="text-teal-600"/> Limit Thn
+                                    </span>
+                                    <span className="font-bold text-gray-700">{plan.features.annualLimit}</span>
+                                    </div>
+                                    <div className="flex items-center justify-between text-xs">
+                                    <span className="text-gray-500 font-medium flex items-center gap-1.5">
+                                        <Icon name="HeartPulse" size={14} className="text-teal-600"/> Limit Add.
+                                    </span>
+                                    <span className="font-bold text-gray-700">{plan.features.additionalLimit}</span>
+                                    </div>
+                                </div>
+
+                                {/* Cash Benefits Section */}
+                                <div className="space-y-2 pt-2">
+                                    <FeatureRow 
+                                    icon={<Icon name="Shield" size={14} className="text-blue-500"/>}
+                                    label="Hibah"
+                                    value={plan.features.deathHibah}
+                                    termKey="deathHibah"
+                                    setSelectedTerm={setSelectedTerm}
+                                    isHighlight={plan.id === 'D'}
+                                    />
+                                    
+                                    <FeatureRow 
+                                    icon={<Icon name="AlertCircle" size={14} className="text-red-500"/>}
+                                    label="Sakit Kritikal"
+                                    value={plan.features.crisisShield}
+                                    termKey="crisisShield"
+                                    setSelectedTerm={setSelectedTerm}
+                                    isHighlight={plan.id === 'D' && plan.features.crisisShield !== 'Tiada'}
+                                    />
+
+                                    <FeatureRow 
+                                    icon={<Icon name="Wallet" size={14} className="text-orange-500"/>}
+                                    label="Income Prot"
+                                    value={plan.features.incomeProtector}
+                                    termKey="incomeProtector"
+                                    setSelectedTerm={setSelectedTerm}
+                                    isHighlight={plan.features.incomeProtector !== 'Tiada'}
+                                    />
+
+                                    <FeatureRow 
+                                    icon={<Icon name="Building2" size={14} className="text-purple-500"/>}
+                                    label="Elaun Gov"
+                                    value={plan.features.govHosp}
+                                    termKey="govHosp"
+                                    setSelectedTerm={setSelectedTerm}
+                                    isHighlight={false}
+                                    />
+
+                                    <FeatureRow 
+                                    icon={<Icon name="Ambulance" size={14} className="text-slate-500"/>}
+                                    label="Kemalangan"
+                                    value={plan.features.accidental}
+                                    termKey="accidental"
+                                    setSelectedTerm={setSelectedTerm}
+                                    isHighlight={false}
+                                    />
+                                </div>
+                                </div>
+                                
+                                <button className={`w-full mt-6 py-2.5 text-sm rounded-xl font-bold shadow-sm transition-all active:scale-95 ${plan.highlight ? 'bg-teal-600 text-white hover:bg-teal-700 shadow-teal-200' : 'bg-white border-2 border-gray-100 text-gray-600 hover:border-teal-500 hover:text-teal-600'}`}>
+                                Pilih {plan.id}
+                                </button>
+                            </div>
+                            </div>
+                        ))}
+                        </div>
+
+                        {/* Why Plan D Recommendation */}
+                        <div className="bg-gradient-to-r from-indigo-600 to-blue-600 p-6 rounded-2xl shadow-xl mt-8 max-w-4xl mx-auto text-white relative overflow-hidden">
+                        <div className="absolute top-0 right-0 opacity-10 transform translate-x-10 -translate-y-10">
+                            <Icon name="Shield" size={150} />
+                        </div>
+                        <div className="relative z-10">
+                            <h3 className="font-bold text-lg flex items-center gap-2 mb-3">
+                            <Icon name="CheckCircle2" size={24} className="text-yellow-300"/> Kenapa Plan D Paling Berbaloi?
+                            </h3>
+                            <p className="text-indigo-100 text-sm leading-relaxed max-w-2xl">
+                            Hanya tambah <span className="font-bold text-white bg-white/20 px-1 rounded">RM22</span> dari Plan B, adik Aisy dapat perlindungan extra:
+                            </p>
+                            <ul className="mt-3 space-y-1 text-sm text-indigo-100">
+                            <li className="flex items-center gap-2">✅ <b>RM16,000</b> Tunai jika sakit kritikal (Plan B tiada)</li>
+                            <li className="flex items-center gap-2">✅ <b>RM20,000</b> Hibah Kematian (Gandaan dari Plan B)</li>
+                            <li className="flex items-center gap-2">✅ <b>RM4,000</b> Income Protector (Plan B tiada)</li>
+                            </ul>
+                        </div>
+                        </div>
+
+                        {/* Validity Acknowledgement */}
+                        <div className="mt-4 bg-orange-50 border border-orange-200 rounded-xl p-4 flex items-center gap-3 max-w-4xl mx-auto shadow-sm">
+                        <div className="bg-orange-100 p-2 rounded-full text-orange-600 shrink-0">
+                            <Icon name="Clock" size={20} />
+                        </div>
+                        <div>
+                            <h4 className="font-bold text-orange-800 text-sm">Penting: Sah Laku Harga</h4>
+                            <p className="text-xs text-orange-700 mt-1 leading-relaxed">
+                            Harga yang dipaparkan ini <b>hanya sah untuk hari ini</b>. Esok harga mungkin berbeza disebabkan perubahan tarikh lahir atau sistem. Sila buat keputusan segera untuk lock harga ini.
+                            </p>
+                        </div>
+                        </div>
+                    </div>
+                    )}
+
+                    {/* CONTENT: Learn / Dictionary View */}
+                    {activeTab === 'learn' && (
+                    <div className="space-y-4 animate-fade-in max-w-3xl mx-auto">
+                        <div className="text-center mb-8">
+                        <h2 className="text-xl font-bold text-gray-800">Glosari Takaful</h2>
+                        <p className="text-gray-500 text-xs uppercase tracking-widest mt-1">Fahamkan sebelum langgan</p>
+                        </div>
+                        
+                        <div className="grid gap-4">
+                        {Object.entries(terms).map(([key, term]) => (
+                            <div key={key} className="bg-white p-5 rounded-xl shadow-sm border-l-4 border-teal-500 flex gap-4 hover:shadow-md transition-shadow">
+                            <div className="bg-teal-50 p-3 rounded-full h-fit text-teal-600 shrink-0">
+                                <Icon name="CheckCircle2" size={20}/>
+                            </div>
+                            <div>
+                                <h4 className="font-bold text-gray-800 mb-1 text-lg">
+                                {term.title}
+                                </h4>
+                                <p className="text-gray-600 text-sm leading-relaxed">
+                                {term.desc}
+                                </p>
+                            </div>
+                            </div>
+                        ))}
+                        </div>
+                    </div>
+                    )}
+
+                </main>
+
+                {/* Term Modal / Popup */}
+                {selectedTerm && terms[selectedTerm] && (
+                    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50" onClick={() => setSelectedTerm(null)}>
+                    <div className="bg-white p-6 rounded-2xl max-w-sm w-full shadow-2xl transform transition-all scale-100 animate-fade-in" onClick={e => e.stopPropagation()}>
+                        <div className="flex justify-between items-start mb-4">
+                        <h3 className="text-lg font-bold text-teal-700">{terms[selectedTerm].title}</h3>
+                        <button onClick={() => setSelectedTerm(null)} className="text-gray-400 hover:text-gray-600">✕</button>
+                        </div>
+                        <p className="text-gray-600 text-sm leading-relaxed mb-6">{terms[selectedTerm].desc}</p>
+                        <button 
+                        onClick={() => setSelectedTerm(null)}
+                        className="w-full bg-teal-600 text-white py-3 rounded-xl font-bold shadow-lg shadow-teal-200 hover:bg-teal-700 active:scale-95 transition-all"
+                        >
+                        Faham, Terima Kasih
+                        </button>
+                    </div>
+                    </div>
+                )}
+
+                {/* Footer Agent Contact */}
+                <footer className="mt-12 bg-white border-t border-gray-100 py-8 px-4">
+                    <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div className="text-center md:text-left">
+                        <p className="text-[10px] text-gray-400 uppercase tracking-wider mb-1">Disediakan Oleh Ejen Sah</p>
+                        <p className="font-bold text-gray-800 text-lg">{agentName}</p>
+                        <p className="text-xs text-teal-600 font-medium">Prudential BSN Takaful</p>
+                    </div>
+                    <button className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-full font-bold shadow-lg shadow-green-200 transition-all hover:scale-105 active:scale-95">
+                        <Icon name="Phone" size={18} />
+                        Whatsapp Saya
                     </button>
-                  </div>
+                    </div>
+                    <div className="text-center mt-8 text-[10px] text-gray-300 max-w-xl mx-auto leading-normal">
+                    Nota: Ini adalah ilustrasi ringkas. Sila rujuk Product Disclosure Sheet (PDS) & Quotation rasmi untuk perincian pengecualian & terma penuh.
+                    </div>
+                </footer>
                 </div>
-              ))}
-            </div>
+            );
+        };
 
-            {/* Why Plan D Recommendation */}
-            <div className="bg-gradient-to-r from-indigo-600 to-blue-600 p-6 rounded-2xl shadow-xl mt-8 max-w-4xl mx-auto text-white relative overflow-hidden">
-              <div className="absolute top-0 right-0 opacity-10 transform translate-x-10 -translate-y-10">
-                <Shield size={150} />
-              </div>
-              <div className="relative z-10">
-                <h3 className="font-bold text-lg flex items-center gap-2 mb-3">
-                  <CheckCircle2 size={24} className="text-yellow-300"/> Kenapa Plan D Paling Berbaloi?
-                </h3>
-                <p className="text-indigo-100 text-sm leading-relaxed max-w-2xl">
-                  Hanya tambah <span className="font-bold text-white bg-white/20 px-1 rounded">RM22</span> dari Plan B, adik Aisy dapat perlindungan extra:
-                </p>
-                <ul className="mt-3 space-y-1 text-sm text-indigo-100">
-                  <li className="flex items-center gap-2">✅ <b>RM16,000</b> Tunai jika sakit kritikal (Plan B tiada)</li>
-                  <li className="flex items-center gap-2">✅ <b>RM20,000</b> Hibah Kematian (Gandaan dari Plan B)</li>
-                  <li className="flex items-center gap-2">✅ <b>RM4,000</b> Income Protector (Plan B tiada)</li>
-                </ul>
-              </div>
-            </div>
-
-             {/* Validity Acknowledgement */}
-            <div className="mt-4 bg-orange-50 border border-orange-200 rounded-xl p-4 flex items-center gap-3 max-w-4xl mx-auto shadow-sm">
-               <div className="bg-orange-100 p-2 rounded-full text-orange-600 shrink-0">
-                 <Clock size={20} />
-               </div>
-               <div>
-                 <h4 className="font-bold text-orange-800 text-sm">Penting: Sah Laku Harga</h4>
-                 <p className="text-xs text-orange-700 mt-1 leading-relaxed">
-                   Harga yang dipaparkan ini <b>hanya sah untuk hari ini</b>. Esok harga mungkin berbeza disebabkan perubahan tarikh lahir atau sistem. Sila buat keputusan segera untuk lock harga ini.
-                 </p>
-               </div>
-            </div>
-          </div>
-        )}
-
-        {/* CONTENT: Learn / Dictionary View */}
-        {activeTab === 'learn' && (
-          <div className="space-y-4 animate-fade-in max-w-3xl mx-auto">
-            <div className="text-center mb-8">
-              <h2 className="text-xl font-bold text-gray-800">Glosari Takaful</h2>
-              <p className="text-gray-500 text-xs uppercase tracking-widest mt-1">Fahamkan sebelum langgan</p>
-            </div>
-            
-            <div className="grid gap-4">
-              {Object.entries(terms).map(([key, term]) => (
-                <div key={key} className="bg-white p-5 rounded-xl shadow-sm border-l-4 border-teal-500 flex gap-4 hover:shadow-md transition-shadow">
-                   <div className="bg-teal-50 p-3 rounded-full h-fit text-teal-600 shrink-0">
-                     <CheckCircle2 size={20}/>
-                   </div>
-                   <div>
-                    <h4 className="font-bold text-gray-800 mb-1 text-lg">
-                      {term.title}
-                    </h4>
-                    <p className="text-gray-600 text-sm leading-relaxed">
-                      {term.desc}
-                    </p>
-                   </div>
+        // Helper Component for Rows
+        const FeatureRow = ({ icon, label, value, termKey, setSelectedTerm, isHighlight }) => (
+            <div className={`flex items-center justify-between p-1.5 rounded-lg transition-colors ${isHighlight ? 'bg-yellow-50 border border-yellow-100' : 'hover:bg-gray-50'}`}>
+                <div className="flex items-center gap-2 cursor-pointer group flex-1" onClick={() => setSelectedTerm(termKey)}>
+                {icon}
+                <span className="text-gray-500 text-[11px] font-medium group-hover:text-teal-600 group-hover:underline decoration-dotted underline-offset-4 truncate">{label}</span>
+                <div className="text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Icon name="CheckCircle2" size={10} />
                 </div>
-              ))}
+                </div>
+                <span className={`font-bold text-right text-[11px] ${value === 'Tiada' ? 'text-gray-300' : 'text-gray-800'}`}>
+                {value}
+                </span>
             </div>
-          </div>
-        )}
+        );
 
-      </main>
-
-      {/* Term Modal / Popup */}
-      {selectedTerm && terms[selectedTerm] && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50" onClick={() => setSelectedTerm(null)}>
-          <div className="bg-white p-6 rounded-2xl max-w-sm w-full shadow-2xl transform transition-all scale-100" onClick={e => e.stopPropagation()}>
-            <div className="flex justify-between items-start mb-4">
-               <h3 className="text-lg font-bold text-teal-700">{terms[selectedTerm].title}</h3>
-               <button onClick={() => setSelectedTerm(null)} className="text-gray-400 hover:text-gray-600">✕</button>
-            </div>
-            <p className="text-gray-600 text-sm leading-relaxed mb-6">{terms[selectedTerm].desc}</p>
-            <button 
-              onClick={() => setSelectedTerm(null)}
-              className="w-full bg-teal-600 text-white py-3 rounded-xl font-bold shadow-lg shadow-teal-200 hover:bg-teal-700 active:scale-95 transition-all"
-            >
-              Faham, Terima Kasih
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Footer Agent Contact */}
-      <footer className="mt-12 bg-white border-t border-gray-100 py-8 px-4">
-        <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="text-center md:text-left">
-            <p className="text-[10px] text-gray-400 uppercase tracking-wider mb-1">Disediakan Oleh Ejen Sah</p>
-            <p className="font-bold text-gray-800 text-lg">{agentName}</p>
-            <p className="text-xs text-teal-600 font-medium">Prudential BSN Takaful</p>
-          </div>
-          <button className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-full font-bold shadow-lg shadow-green-200 transition-all hover:scale-105 active:scale-95">
-            <Phone size={18} />
-            Whatsapp Saya
-          </button>
-        </div>
-        <div className="text-center mt-8 text-[10px] text-gray-300 max-w-xl mx-auto leading-normal">
-          Nota: Ini adalah ilustrasi ringkas. Sila rujuk Product Disclosure Sheet (PDS) & Quotation rasmi untuk perincian pengecualian & terma penuh.
-        </div>
-      </footer>
-    </div>
-  );
-};
-
-// Helper Component for Rows
-const FeatureRow = ({ icon, label, value, termKey, setSelectedTerm, isHighlight }) => (
-  <div className={`flex items-center justify-between p-1.5 rounded-lg transition-colors ${isHighlight ? 'bg-yellow-50 border border-yellow-100' : 'hover:bg-gray-50'}`}>
-    <div className="flex items-center gap-2 cursor-pointer group flex-1" onClick={() => setSelectedTerm(termKey)}>
-      {icon}
-      <span className="text-gray-500 text-[11px] font-medium group-hover:text-teal-600 group-hover:underline decoration-dotted underline-offset-4 truncate">{label}</span>
-      <div className="text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity">
-        <CheckCircle2 size={10} />
-      </div>
-    </div>
-    <span className={`font-bold text-right text-[11px] ${value === 'Tiada' ? 'text-gray-300' : 'text-gray-800'}`}>
-      {value}
-    </span>
-  </div>
-);
-
-export default ProposalApp;
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<ProposalApp />);
+    </script>
+</body>
+</html>
