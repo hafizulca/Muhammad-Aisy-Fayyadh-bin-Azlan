@@ -15,7 +15,7 @@ import {
   ArrowRight,
   Ambulance,
   Coins,
-  Clock // Added Clock icon
+  Clock
 } from 'lucide-react';
 
 const ProposalApp = () => {
@@ -30,7 +30,7 @@ const ProposalApp = () => {
     {
       id: 'A',
       name: 'Plan A (Starter)',
-      price: 155,
+      price: 155, // Updated Price from latest image
       highlight: false,
       features: {
         medicalCard: true,
@@ -210,7 +210,7 @@ const ProposalApp = () => {
                     <h3 className="text-lg font-bold text-gray-700 text-center">{plan.name}</h3>
                     <div className="text-center my-4 pb-4 border-b border-gray-100">
                       <span className="text-2xl font-extrabold text-teal-600">
-                        {plan.price === '--' ? 'RM --' : `RM${plan.price}`}
+                        RM{plan.price}
                       </span>
                       <span className="text-gray-400 text-xs block mt-1">/bulan</span>
                     </div>
@@ -315,7 +315,7 @@ const ProposalApp = () => {
               </div>
             </div>
 
-             {/* Validity Acknowledgement (NEW ADDITION) */}
+             {/* Validity Acknowledgement */}
             <div className="mt-4 bg-orange-50 border border-orange-200 rounded-xl p-4 flex items-center gap-3 max-w-4xl mx-auto shadow-sm">
                <div className="bg-orange-100 p-2 rounded-full text-orange-600 shrink-0">
                  <Clock size={20} />
